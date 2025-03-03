@@ -11,7 +11,7 @@
         }
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(2, 1fr); /* 2列表示を固定 */
             gap: 15px;
             justify-content: center;
             margin-top: 20px;
@@ -50,12 +50,12 @@
             font-size: 14px;
         }
         .size-quantity select {
-            width: 55%;
+            width: 60px; /* サイズのプルダウン幅調整 */
             padding: 5px;
             text-align: center;
         }
         .size-quantity .quantity-select {
-            width: 70px; /* 数量のプルダウンを調整 */
+            width: 50px; /* 数量のプルダウンを小さく */
             padding: 5px;
             text-align: center;
         }
@@ -134,7 +134,7 @@
                         </select>
                         <label for="quantity${i}">数量：</label>
                         <select id="quantity${i}" name="quantity${i}" class="quantity-select" disabled>
-                            <option value="">--選択--</option>
+                            <option value="">--</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                         </select>
