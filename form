@@ -119,8 +119,7 @@
             { name: "夏カーゴパンツ", sizes: ["70", "73", "76", "79", "82", "85", "88", "91", "95", "100", "120"], image: "images/summer_cargo_pants.jpg" },
             { name: "帽子(製造)", sizes: ["L", "LL", "3L"], image: "images/hat_factory.jpg" },
             { name: "帽子(仕上場)", sizes: ["フリー"], image: "images/hat_finishing.jpg" },
-            { name: "安全靴 黒", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"], image: "https://raw.githubusercontent.com/NAKAYAKAGAKU/-/main/安全靴黒.jpg
-" },
+            { name: "安全靴 黒", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"], image: "https://raw.githubusercontent.com/NAKAYAKAGAKU/-/main/安全靴黒.jpg" },
             { name: "エプロン", sizes: ["黒", "カーキ"], image: "images/apron.jpg" }
         ];
 
