@@ -1,4 +1,5 @@
 <!-- Force redeploy -->
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -121,8 +122,6 @@
             { name: "帽子(製造)", sizes: ["L", "LL", "3L"], image: "images/hat_factory.jpg" },
             { name: "帽子(仕上場)", sizes: ["フリー"], image: "images/hat_finishing.jpg" },
             { name: "安全靴 黒", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"], image: "images/safety_shoes_black.jpg" },
-            { name: "安全靴 赤", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"], image: "images/safety_shoes_red.jpg" },
-            { name: "安全靴 黒(線が青)", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"], image: "images/safety_shoes_black_blue.jpg" },
             { name: "エプロン", sizes: ["黒", "カーキ"], image: "images/apron.jpg" }
         ];
 
@@ -141,7 +140,7 @@
                             <option value="">--サイズ--</option>
                             ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
                         </select>
-                        <label for="quantity${index}">数量：</label>
+                        <label for="quantity${index}">数：</label>
                         <select id="quantity${index}" name="quantity${index}" class="quantity-select" disabled>
                             <option value="">--</option>
                             <option value="1">1</option>
@@ -151,6 +150,18 @@
                 `;
                 container.appendChild(div);
             });
+        }
+
+        function validateQuantity(index) {
+            let sizeSelect = document.getElementById(`size${index}`);
+            let quantitySelect = document.getElementById(`quantity${index}`);
+
+            if (sizeSelect.value) {
+                quantitySelect.disabled = false;
+            } else {
+                quantitySelect.value = "";
+                quantitySelect.disabled = true;
+            }
         }
 
         document.addEventListener("DOMContentLoaded", loadProducts);
