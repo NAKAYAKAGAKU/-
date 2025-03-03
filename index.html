@@ -54,8 +54,8 @@
             padding: 5px;
             text-align: center;
         }
-        .size-quantity input {
-            width: 50px;
+        .size-quantity .quantity-select {
+            width: 70px; /* 数量のプルダウンを調整 */
             padding: 5px;
             text-align: center;
         }
@@ -133,7 +133,11 @@
                             ${products[i].sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
                         </select>
                         <label for="quantity${i}">数量：</label>
-                        <input type="number" id="quantity${i}" name="quantity${i}" min="1" max="10" value="" disabled>
+                        <select id="quantity${i}" name="quantity${i}" class="quantity-select" disabled>
+                            <option value="">--選択--</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
                     </div>
                 `;
                 container.appendChild(div);
@@ -142,13 +146,13 @@
 
         function validateQuantity(index) {
             let sizeSelect = document.getElementById(`size${index}`);
-            let quantityInput = document.getElementById(`quantity${index}`);
+            let quantitySelect = document.getElementById(`quantity${index}`);
 
             if (sizeSelect.value) {
-                quantityInput.disabled = false;
+                quantitySelect.disabled = false;
             } else {
-                quantityInput.value = "";
-                quantityInput.disabled = true;
+                quantitySelect.value = "";
+                quantitySelect.disabled = true;
             }
         }
 
@@ -159,7 +163,7 @@
                 let size = document.getElementById(`size${index}`).value;
                 let quantity = document.getElementById(`quantity${index}`).value;
 
-                if (size && (!quantity || quantity < 1)) {
+                if (size && !quantity) {
                     errors.push(`${product.name} の数量を入力してください。`);
                 }
             });
