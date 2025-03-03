@@ -11,7 +11,7 @@
         }
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 列幅を少し狭く */
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 15px;
             justify-content: center;
             margin-top: 20px;
@@ -28,7 +28,7 @@
             margin-right: 10px;
         }
         .form-group input, .form-group select {
-            width: 180px; /* 幅を少し狭く */
+            width: 180px;
             padding: 5px;
             text-align: center;
         }
@@ -55,7 +55,7 @@
             text-align: center;
         }
         .size-quantity input {
-            width: 50px; /* 数量入力欄の幅を狭く */
+            width: 50px;
             padding: 5px;
             text-align: center;
         }
@@ -128,16 +128,48 @@
                 div.innerHTML = `
                     <h4>${products[i].name}</h4>
                     <div class="size-quantity">
-                        <select id="size${i}" name="size${i}">
+                        <select id="size${i}" name="size${i}" onchange="validateQuantity(${i})">
                             <option value="">--サイズ--</option>
                             ${products[i].sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
                         </select>
                         <label for="quantity${i}">数量：</label>
-                        <input type="number" id="quantity${i}" name="quantity${i}" min="1" max="10" value="1">
+                        <input type="number" id="quantity${i}" name="quantity${i}" min="1" max="10" value="" disabled>
                     </div>
                 `;
                 container.appendChild(div);
             }
+        }
+
+        function validateQuantity(index) {
+            let sizeSelect = document.getElementById(`size${index}`);
+            let quantityInput = document.getElementById(`quantity${index}`);
+
+            if (sizeSelect.value) {
+                quantityInput.disabled = false;
+            } else {
+                quantityInput.value = "";
+                quantityInput.disabled = true;
+            }
+        }
+
+        function submitForm() {
+            let errors = [];
+
+            products.forEach((product, index) => {
+                let size = document.getElementById(`size${index}`).value;
+                let quantity = document.getElementById(`quantity${index}`).value;
+
+                if (size && (!quantity || quantity < 1)) {
+                    errors.push(`${product.name} の数量を入力してください。`);
+                }
+            });
+
+            if (errors.length > 0) {
+                alert(errors.join("\n"));
+                return;
+            }
+
+            alert("申請が完了しました！");
         }
 
         document.addEventListener("DOMContentLoaded", loadProducts);
