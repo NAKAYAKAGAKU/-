@@ -11,7 +11,7 @@
         }
         .container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2列 */
+            grid-template-columns: repeat(2, 1fr); /* 2列表示 */
             gap: 20px;
             justify-content: center;
             margin-top: 20px;
@@ -45,17 +45,17 @@
             height: auto;
             border-radius: 10px;
         }
-        .product .size-quantity {
+        .size-quantity {
             display: flex;
             justify-content: center;
             gap: 10px;
             align-items: center;
             margin-top: 5px;
         }
-        .product select, .product input {
+        .size-quantity select, .size-quantity input {
             width: 50%;
             padding: 5px;
-            text-align: center; /* 入力値中央揃え */
+            text-align: center;
         }
         button {
             margin-top: 20px;
@@ -102,11 +102,18 @@
 
     <script>
         const products = [
-            { name: "冬ブルゾン(上着)", image: "images/winter_jacket.jpg", sizes: ["S", "M", "L", "LL", "3L", "4L", "5L"] },
-            { name: "冬カーゴパンツ", image: "images/cargo_pants.jpg", sizes: ["S", "M", "L", "LL", "3L", "4L", "5L", "6L"] },
-            { name: "Ｔシャツ(速乾)", image: "images/dry_tshirt.jpg", sizes: ["S", "M", "L", "LL", "3L", "4L", "6L"] },
-            { name: "Ｔシャツ(綿)", image: "images/cotton_tshirt.jpg", sizes: ["S", "M", "L", "LL", "3L"] },
-            { name: "エプロン", image: "images/apron.jpg", sizes: ["黒", "カーキ"] }
+            { name: "冬ブルゾン(上着)", sizes: ["S", "M", "L", "LL", "3L", "4L", "5L"] },
+            { name: "冬カーゴパンツ", sizes: ["S", "M", "L", "LL", "3L", "4L", "5L", "6L"] },
+            { name: "Ｔシャツ(速乾)", sizes: ["S", "M", "L", "LL", "3L", "4L", "6L"] },
+            { name: "Ｔシャツ(綿)", sizes: ["S", "M", "L", "LL", "3L"] },
+            { name: "半袖ブルゾン", sizes: ["L", "LL"] },
+            { name: "夏カーゴパンツ", sizes: ["70", "73", "76", "79", "82", "85", "88", "91", "95", "100", "120"] },
+            { name: "帽子(製造)", sizes: ["L", "LL", "3L"] },
+            { name: "帽子(仕上場)", sizes: ["フリー"] },
+            { name: "安全靴 黒", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"] },
+            { name: "安全靴 赤", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"] },
+            { name: "安全靴 黒(線が青)", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"] },
+            { name: "エプロン", sizes: ["黒", "カーキ"] }
         ];
 
         function loadProducts() {
@@ -117,7 +124,6 @@
                 let div = document.createElement("div");
                 div.classList.add("product");
                 div.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
                     <h4>${product.name}</h4>
                     <div class="size-quantity">
                         <select id="size${index}" name="size${index}">
@@ -131,30 +137,7 @@
             });
         }
 
-        function submitForm() {
-            let date = document.getElementById("date").value;
-            let name = document.getElementById("name").value;
-            let department = document.getElementById("department").value;
-            let orders = [];
-
-            products.forEach((product, index) => {
-                let size = document.getElementById(`size${index}`).value;
-                let quantity = document.getElementById(`quantity${index}`).value;
-                if (size && quantity > 0) {
-                    orders.push({ product: product.name, size: size, quantity: quantity });
-                }
-            });
-
-            if (!date || !name || !department || orders.length === 0) {
-                alert("すべての項目を入力してください。");
-                return;
-            }
-
-            alert("申請が完了しました！\n\n" + JSON.stringify(orders, null, 2));
-        }
-
         document.addEventListener("DOMContentLoaded", loadProducts);
     </script>
 </body>
 </html>
-
