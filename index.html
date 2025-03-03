@@ -1,170 +1,36 @@
 <!-- Force redeploy -->
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>制服支給申請フォーム</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2列表示を固定 */
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .form-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .form-group label {
-            width: 80px;
-            text-align: right;
-            margin-right: 10px;
-        }
-        .form-group input, .form-group select {
-            width: 180px;
-            padding: 5px;
-            text-align: center;
-        }
-        .product {
-            border: 1px solid #ddd;
-            padding: 8px;
-            border-radius: 10px;
-            text-align: center;
-            background-color: #f9f9f9;
-        }
-        .product img {
-            width: 100%;
-            max-height: 150px; /* 画像サイズを統一 */
-            object-fit: cover;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-        .size-quantity {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            align-items: center;
-            margin-top: 5px;
-        }
-        .size-quantity label {
-            font-size: 14px;
-        }
-        .size-quantity select {
-            width: 60px;
-            padding: 5px;
-            text-align: center;
-        }
-        .size-quantity .quantity-select {
-            width: 50px;
-            padding: 5px;
-            text-align: center;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <h2>申請フォーム</h2>
-    <form id="form" onsubmit="event.preventDefault(); submitForm();">
-        
-        <div class="form-group">
-            <label for="date">日付:</label>
-            <input type="date" id="date" name="date" required>
-        </div>
+<script>
+  async function loadProducts() {
+    const url = "https://script.google.com/macros/s/AKfycby3NWXTHK9BWImCl0FMJQoU7mYRnF7a0xeCFn7QfCTmafUCNhM1RcjRM9EEAhM7ABjq/exec";  // GASのURLを設定
+    const response = await fetch(url);
+    const products = await response.json();
+    
+    let container = document.getElementById("productContainer");
+    container.innerHTML = "";
 
-        <div class="form-group">
-            <label for="name">氏名:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
+    products.forEach((product, index) => {
+        let div = document.createElement("div");
+        div.classList.add("product");
+        div.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h4>${product.name}</h4>
+            <div class="size-quantity">
+                <select id="size${index}" name="size${index}" onchange="validateQuantity(${index})">
+                    <option value="">--サイズ--</option>
+                    ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
+                </select>
+                <label for="quantity${index}">数：</label>
+                <select id="quantity${index}" name="quantity${index}" class="quantity-select" disabled>
+                    <option value="">--</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+  }
 
-        <div class="form-group">
-            <label for="department">部署:</label>
-            <select id="department" name="department" required>
-                <option value="">--選択--</option>
-                <option value="製造">製造</option>
-                <option value="物流">物流</option>
-                <option value="生産管理">生産管理</option>
-                <option value="品質管理">品質管理</option>
-                <option value="事務室">事務室</option>
-                <option value="ピッキング">ピッキング</option>
-                <option value="仕上場">仕上場</option>
-                <option value="商品補充">商品補充</option>
-                <option value="実習生">実習生</option>
-            </select>
-        </div>
-
-        <div class="container" id="productContainer"></div>
-
-        <button type="submit">申請</button>
-    </form>
-
-    <script>
-        const products = [
-            { name: "冬ブルゾン(上着)", sizes: ["S", "M", "L", "LL", "3L", "4L", "5L"], image: "images/winter_jacket.jpg" },
-            { name: "冬カーゴパンツ", sizes: ["S", "M", "L", "LL", "3L", "4L", "5L", "6L"], image: "images/cargo_pants.jpg" },
-            { name: "Ｔシャツ(速乾)", sizes: ["S", "M", "L", "LL", "3L", "4L", "6L"], image: "images/dry_tshirt.jpg" },
-            { name: "Ｔシャツ(綿)", sizes: ["S", "M", "L", "LL", "3L"], image: "images/cotton_tshirt.jpg" },
-            { name: "半袖ブルゾン", sizes: ["L", "LL"], image: "images/short_jacket.jpg" },
-            { name: "夏カーゴパンツ", sizes: ["70", "73", "76", "79", "82", "85", "88", "91", "95", "100", "120"], image: "images/summer_cargo_pants.jpg" },
-            { name: "帽子(製造)", sizes: ["L", "LL", "3L"], image: "images/hat_factory.jpg" },
-            { name: "帽子(仕上場)", sizes: ["フリー"], image: "images/hat_finishing.jpg" },
-            { name: "安全靴 黒", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"], image: "images/safety_shoes_black.jpg" },
-            { name: "エプロン", sizes: ["黒", "カーキ"], image: "images/apron.jpg" }
-        ];
-
-        function loadProducts() {
-            let container = document.getElementById("productContainer");
-            container.innerHTML = "";
-
-            products.forEach((product, index) => {
-                let div = document.createElement("div");
-                div.classList.add("product");
-                div.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}">
-                    <h4>${product.name}</h4>
-                    <div class="size-quantity">
-                        <select id="size${index}" name="size${index}" onchange="validateQuantity(${index})">
-                            <option value="">--サイズ--</option>
-                            ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
-                        </select>
-                        <label for="quantity${index}">数：</label>
-                        <select id="quantity${index}" name="quantity${index}" class="quantity-select" disabled>
-                            <option value="">--</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                        </select>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function validateQuantity(index) {
-            let sizeSelect = document.getElementById(`size${index}`);
-            let quantitySelect = document.getElementById(`quantity${index}`);
-
-            if (sizeSelect.value) {
-                quantitySelect.disabled = false;
-            } else {
-                quantitySelect.value = "";
-                quantitySelect.disabled = true;
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", loadProducts);
-    </script>
-</body>
-</html>
+  document.addEventListener("DOMContentLoaded", loadProducts);
+</script>
