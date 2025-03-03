@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>申請フォーム</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .product {
+            width: 200px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .product img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        select, input {
+            width: 100%;
+            margin-top: 5px;
+            padding: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>申請フォーム</h2>
+    <form id="form" onsubmit="event.preventDefault(); submitForm();">
+        <label for="date">日付:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="name">氏名:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="department">部署:</label>
+        <select id="department" name="department" required>
+            <option value="">--選択--</option>
+            <option value="製造">製造</option>
+            <option value="物流">物流</option>
+            <option value="生産管理">生産管理</option>
+            <option value="品質管理">品質管理</option>
+            <option value="事務室">事務室</option>
+            <option value="ピッキング">ピッキング</option>
+            <option value="仕上場">仕上場</option>
+            <option value="商品補充">商品補充</option>
+            <option value="実習生">実習生</option>
+        </select>
+
+        <div class="container" id="productContainer"></div>
+
+        <button type="submit">申請</button>
+    </form>
+
+    <script>
+        const products = [
+            { name: "冬ブルゾン(上着)", image: "images/winter_jacket.jpg", sizes: ["S", "M", "L", "LL", "3L", "4L", "5L"] },
+            { name: "冬カーゴパンツ", image: "images/cargo_pants.jpg", sizes: ["S", "M", "L", "LL", "3L", "4L", "5L", "6L"] },
+            { name: "Ｔシャツ(速乾)", image: "images/dry_tshirt.jpg", sizes: ["S", "M", "L", "LL", "3L", "4L", "6L"] },
+            { name: "Ｔシャツ(綿)", image: "images/cotton_tshirt.jpg", sizes: ["S", "M", "L", "LL", "3L"] },
+            { name: "半袖ブルゾン", image: "images/short_jacket.jpg", sizes: ["L", "LL"] },
+            { name: "夏カーゴパンツ", image: "images/summer_pants.jpg", sizes: ["70", "73", "76", "79", "82", "85", "88", "91", "95", "100", "120"] },
+            { name: "帽子(製造)", image: "images/hat_factory.jpg", sizes: ["L", "LL", "3L"] },
+            { name: "帽子(仕上場)", image: "images/hat_finishing.jpg", sizes: ["フリー"] },
+            { name: "安全靴 黒", image: "images/safety_shoes_black.jpg", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"] },
+            { name: "安全靴 赤", image: "images/safety_shoes_red.jpg", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"] },
+            { name: "安全靴 黒(線が青)", image: "images/safety_shoes_black_blue.jpg", sizes: ["22.5", "23", "23.5", "24", "24.5", "25", "25.5", "26", "26.5", "27", "27.5", "28", "29", "29.5", "30"] },
+            { name: "エプロン", image: "images/apron.jpg", sizes: ["黒", "カーキ"] }
+        ];
+
+        function loadProducts() {
+            let container = document.getElementById("productContainer");
+            container.innerHTML = "";
+
+            products.forEach((product, index) => {
+                let div = document.createElement("div");
+                div.classList.add("product");
+                div.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h4>${product.name}</h4>
+                    <label for="size${index}">サイズ:</label>
+                    <select id="size${index}" name="size${index}">
+                        <option value="">--選択--</option>
+                        ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
+                    </select>
+                    <label for="quantity${index}">数量:</label>
+                    <input type="number" id="quantity${index}" name="quantity${index}" min="1" max="10" value="1">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function submitForm() {
+            let date = document.getElementById("date").value;
+            let name = document.getElementById("name").value;
+            let department = document.getElementById("department").value;
+            let orders = [];
+
+            products.forEach((product, index) => {
+                let size = document.getElementById(`size${index}`).value;
+                let quantity = document.getElementById(`quantity${index}`).value;
+                if (size && quantity > 0) {
+                    orders.push({ product: product.name, size: size, quantity: quantity });
+                }
+            });
+
+            if (!date || !name || !department || orders.length === 0) {
+                alert("すべての項目を入力してください。");
+                return;
+            }
+
+            alert("申請が完了しました！\n\n" + JSON.stringify(orders, null, 2));
+        }
+
+        document.addEventListener("DOMContentLoaded", loadProducts);
+    </script>
+</body>
+</html>
