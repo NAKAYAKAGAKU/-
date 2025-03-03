@@ -11,7 +11,7 @@
         }
         .container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2列表示 */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 可変2列表示 */
             gap: 20px;
             justify-content: center;
             margin-top: 20px;
@@ -33,17 +33,11 @@
             text-align: center;
         }
         .product {
-            width: 250px;
             border: 1px solid #ddd;
             padding: 10px;
             border-radius: 10px;
             text-align: center;
             background-color: #f9f9f9;
-        }
-        .product img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
         }
         .size-quantity {
             display: flex;
@@ -120,21 +114,21 @@
             let container = document.getElementById("productContainer");
             container.innerHTML = "";
 
-            products.forEach((product, index) => {
+            for (let i = 0; i < products.length; i++) {
                 let div = document.createElement("div");
                 div.classList.add("product");
                 div.innerHTML = `
-                    <h4>${product.name}</h4>
+                    <h4>${products[i].name}</h4>
                     <div class="size-quantity">
-                        <select id="size${index}" name="size${index}">
+                        <select id="size${i}" name="size${i}">
                             <option value="">--サイズ--</option>
-                            ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
+                            ${products[i].sizes.map(size => `<option value="${size}">${size}</option>`).join("")}
                         </select>
-                        <input type="number" id="quantity${index}" name="quantity${index}" min="1" max="10" value="1">
+                        <input type="number" id="quantity${i}" name="quantity${i}" min="1" max="10" value="1">
                     </div>
                 `;
                 container.appendChild(div);
-            });
+            }
         }
 
         document.addEventListener("DOMContentLoaded", loadProducts);
